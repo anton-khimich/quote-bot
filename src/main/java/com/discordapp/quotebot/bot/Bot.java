@@ -10,7 +10,7 @@ public class Bot {
 
     public Bot() {
         try {
-            String token = "";
+            String token = "NTU4ODI5MjYzNzMwNzY5OTIw.XKJAxw.R6af-HsIKYZm0TySlFUNNbGJ_CQ";
             JDA jda = new JDABuilder(token)
                     .addEventListener(new MyBotListener())
                     .build();
