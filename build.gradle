@@ -1,21 +1,9 @@
-buildscript {
-    repositories {
-        jcenter()
-		mavenCentral()
-    }
-    dependencies {
-        classpath 'com.google.cloud.tools:appengine-gradle-plugin:1.+'
-    }
-}
-
 plugins {
 	id 'org.springframework.boot' version '2.1.3.RELEASE'
 	id 'java'
-	id 'war'
 }
 
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.google.cloud.tools.appengine'
 
 group = 'com.discord-app'
 version = '0.0.1-SNAPSHOT'
@@ -29,6 +17,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 ext {
@@ -36,12 +25,10 @@ ext {
 }
 
 dependencies {
-	implementation('org.springframework.boot:spring-boot-starter-web') {
-		exclude module: 'spring-boot-starter-tomcat'
+	implementation ('net.dv8tion:JDA:3.8.3_462') {
+		exclude module: 'opus-java'
 	}
-//	implementation 'org.springframework.boot:spring-boot-starter-jetty'
-//	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.google.appengine:appengine-api-1.0-sdk:+'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-gcp-starter'
 	implementation 'org.springframework.cloud:spring-cloud-gcp-starter-data-datastore'
 	implementation 'com.graphql-java:graphql-java:11.0'
@@ -49,8 +36,6 @@ dependencies {
 	implementation 'com.google.guava:guava:26.0-jre'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-//	providedRuntime 'org.slf4j:jul-to-slf4j:1.7.25'
-	providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
@@ -58,10 +43,4 @@ dependencyManagement {
 	imports {
 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
 	}
-}
-
-appengine {
-    deploy {
-
-    }
 }
