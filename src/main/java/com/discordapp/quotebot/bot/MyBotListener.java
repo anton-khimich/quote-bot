@@ -1,5 +1,6 @@
 package com.discordapp.quotebot.bot;
 
+import net.dv8tion.jda.core.MessageBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageChannel;
@@ -19,7 +20,8 @@ public class MyBotListener extends ListenerAdapter {
         if (event.isFromType(ChannelType.TEXT)) {
             if (content.startsWith("!q")) {
                 MessageChannel channel = event.getChannel();
-                channel.sendMessage("<@" + author.getAsTag() + "> Command recognized.").queue();
+                Message reply = new MessageBuilder().append(author).append("Command recognized.").build();
+                channel.sendMessage(reply).queue();
             }
         }
     }
