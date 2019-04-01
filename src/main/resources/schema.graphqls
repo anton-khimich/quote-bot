@@ -1,0 +1,23 @@
+type Query {
+  quoteById(id: ID): Quote
+}
+
+type Mutation {
+  saveQuote(input: QuoteInput!): Quote
+}
+
+input QuoteInput {
+  id: ID
+  name: String!
+  content: String!
+  author: String
+  contributor: String!
+}
+
+type Quote {
+  id: ID
+  name: String
+  content: String
+  author: String
+  contributor: String
+}
