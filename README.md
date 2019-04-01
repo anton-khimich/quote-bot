@@ -8,6 +8,8 @@ https://discordapp.com/api/oauth2/authorize?client_id=558829263730769920&permiss
 ```c
 // Display the quote of the day.
 !q
+// Display the quote by the given name.
+!q <name>
 // Add a quote to the database. The author field is optional.
 !q add <name> <content> <author>
 // Update an existing quote in the database. The author field is optional.
