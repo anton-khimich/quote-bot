@@ -47,9 +47,11 @@ public class GraphQLProvider {
     private RuntimeWiring buildWiring() {
         return RuntimeWiring.newRuntimeWiring()
                 .type(TypeRuntimeWiring.newTypeWiring("Query")
-                        .dataFetcher("quoteById", graphQLDataFetchers.getQuoteByIdDataFetcher()))
+                        .dataFetcher("quoteByName", graphQLDataFetchers.getQuoteByNameDataFetcher()))
                 .type(TypeRuntimeWiring.newTypeWiring("Mutation")
                         .dataFetcher("saveQuote", graphQLDataFetchers.saveQuoteDataFetcher()))
+                .type(TypeRuntimeWiring.newTypeWiring("Mutation")
+                        .dataFetcher("deleteQuote", graphQLDataFetchers.deleteQuoteDataFetcher()))
                 .build();
     }
 }

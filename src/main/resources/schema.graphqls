@@ -1,13 +1,13 @@
 type Query {
-  quoteById(id: ID): Quote
+  quoteByName(name: String!): Quote
 }
 
 type Mutation {
   saveQuote(input: QuoteInput!): Quote
+  deleteQuote(name: String!): String
 }
 
 input QuoteInput {
-  id: ID
   name: String!
   content: String!
   author: String
@@ -15,7 +15,6 @@ input QuoteInput {
 }
 
 type Quote {
-  id: ID
   name: String
   content: String
   author: String

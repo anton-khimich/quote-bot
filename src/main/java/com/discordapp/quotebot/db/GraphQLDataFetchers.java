@@ -1,6 +1,7 @@
 package com.discordapp.quotebot.db;
 
 import com.discordapp.quotebot.entity.Quote;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.schema.DataFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,24 +18,27 @@ public class GraphQLDataFetchers {
         this.quoteRepository = quoteRepository;
     }
 
-    DataFetcher getQuoteByIdDataFetcher() {
+    DataFetcher getQuoteByNameDataFetcher() {
         return dataFetchingEnvironment -> {
-            String quoteId = dataFetchingEnvironment.getArgument("id");
-            return quoteRepository.findById(quoteId);
+            String quoteName = dataFetchingEnvironment.getArgument("name");
+            return quoteRepository.findById(quoteName);
         };
     }
 
     DataFetcher saveQuoteDataFetcher() {
         return dataFetchingEnvironment -> {
-            LinkedHashMap<String, String> quoteMap = dataFetchingEnvironment.getArgument("input");
-            String id = quoteMap.get("id");
-            String name = quoteMap.get("name");
-            String content = quoteMap.get("content");
-            String author = quoteMap.getOrDefault("author", "Unknown");
-            String contributor = quoteMap.get("contributor");
-            Quote quote = Quote.builder().id(id).name(name).content(content).author(author).contributor(contributor).build();
+            ObjectMapper mapper = new ObjectMapper();
+            Quote quote = mapper.convertValue(dataFetchingEnvironment.getArgument("input"), Quote.class);
             quoteRepository.save(quote);
             return quote;
+        };
+    }
+
+    DataFetcher deleteQuoteDataFetcher() {
+        return dataFetchingEnvironment -> {
+            String quoteName = dataFetchingEnvironment.getArgument("name");
+            quoteRepository.deleteById(quoteName);
+            return null;
         };
     }
 
