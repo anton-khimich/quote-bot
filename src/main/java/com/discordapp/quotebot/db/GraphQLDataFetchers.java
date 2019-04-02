@@ -6,8 +6,6 @@ import graphql.schema.DataFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
-
 @Component
 public class GraphQLDataFetchers {
 
@@ -18,17 +16,18 @@ public class GraphQLDataFetchers {
         this.quoteRepository = quoteRepository;
     }
 
-    DataFetcher getQuoteByNameDataFetcher() {
+    DataFetcher getQuoteByGuildAndNameDataFetcher() {
         return dataFetchingEnvironment -> {
             String quoteName = dataFetchingEnvironment.getArgument("name");
-            return quoteRepository.findById(quoteName);
+            String quoteGuild = dataFetchingEnvironment.getArgument("guild");
+            return quoteRepository.findByGuildAndName(quoteGuild, quoteName).get(0);
         };
     }
 
     DataFetcher saveQuoteDataFetcher() {
         return dataFetchingEnvironment -> {
             ObjectMapper mapper = new ObjectMapper();
-            Quote quote = mapper.convertValue(dataFetchingEnvironment.getArgument("input"), Quote.class);
+            Quote quote = mapper.convertValue(dataFetchingEnvironment.getArgument("quote"), Quote.class);
             quoteRepository.save(quote);
             return quote;
         };
@@ -37,7 +36,8 @@ public class GraphQLDataFetchers {
     DataFetcher deleteQuoteDataFetcher() {
         return dataFetchingEnvironment -> {
             String quoteName = dataFetchingEnvironment.getArgument("name");
-            quoteRepository.deleteById(quoteName);
+            String quoteGuild = dataFetchingEnvironment.getArgument("guild");
+            quoteRepository.deleteByGuildAndName(quoteGuild, quoteName);
             return null;
         };
     }

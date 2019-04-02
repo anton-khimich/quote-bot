@@ -1,22 +1,25 @@
 type Query {
-  quoteByName(name: String!): Quote
+  quoteByGuildAndName(guild: String!, name: String!): Quote
 }
 
 type Mutation {
-  saveQuote(input: QuoteInput!): Quote
-  deleteQuote(name: String!): String
+  saveQuote(quote: QuoteInput!): Quote
+  deleteQuote(guild: String!, name: String!): String
 }
 
 input QuoteInput {
   name: String!
-  content: String!
+  content: String
   author: String
   contributor: String!
+  guild: String!
 }
 
 type Quote {
+  id: ID
   name: String
   content: String
   author: String
   contributor: String
+  guild: String
 }

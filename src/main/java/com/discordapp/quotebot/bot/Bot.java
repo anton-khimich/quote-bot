@@ -1,8 +1,9 @@
 package com.discordapp.quotebot.bot;
 
+import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import org.springframework.stereotype.Service;
-import net.dv8tion.jda.core.JDA;
+
 import javax.security.auth.login.LoginException;
 
 @Service
