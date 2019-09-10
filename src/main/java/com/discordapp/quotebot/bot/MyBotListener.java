@@ -17,11 +17,26 @@ public class MyBotListener extends ListenerAdapter {
         Message message = event.getMessage();
         User author = message.getAuthor();
         String content = message.getContentDisplay();
+        Message reply;
         if (event.isFromType(ChannelType.TEXT)) {
-            if (content.startsWith("!q")) {
-                MessageChannel channel = event.getChannel();
-                Message reply = new MessageBuilder().append(author).append("Command recognized.").build();
+            MessageChannel channel = event.getChannel();
+            if (content.startsWith("!qsave")) {
+                reply = new MessageBuilder().append(author).append("Save quote.").build();
                 channel.sendMessage(reply).queue();
+            } else if (content.startsWith("!qdelete")) {
+                reply = new MessageBuilder().append(author).append("Delete quote.").build();
+                channel.sendMessage(reply).queue();
+            } else if (content.startsWith("!qlist")) {
+                reply = new MessageBuilder().append(author).append("Quote list.").build();
+                channel.sendMessage(reply).queue();
+            } else if (content.startsWith("!q")) {
+                if (content.equals("!q")) {
+                    reply = new MessageBuilder().append(author).append("Daily quote.").build();
+                    channel.sendMessage(reply).queue();
+                } else if (content.matches("!q .+")) {
+                    reply = new MessageBuilder().append(author).append("Specific quote.").build();
+                    channel.sendMessage(reply).queue();
+                }
             }
         }
     }

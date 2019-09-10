@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface QuoteRepository extends DatastoreRepository<Quote, String> {
     List<Quote> findByGuildAndName(String guild, String name);
-    void deleteByGuildAndName(String guild, String name);
+    List<Quote> deleteByGuildAndName(String guild, String name);
 }

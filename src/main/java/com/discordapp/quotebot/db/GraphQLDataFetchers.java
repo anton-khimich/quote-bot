@@ -6,6 +6,8 @@ import graphql.schema.DataFetcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class GraphQLDataFetchers {
 
@@ -37,8 +39,8 @@ public class GraphQLDataFetchers {
         return dataFetchingEnvironment -> {
             String quoteName = dataFetchingEnvironment.getArgument("name");
             String quoteGuild = dataFetchingEnvironment.getArgument("guild");
-            quoteRepository.deleteByGuildAndName(quoteGuild, quoteName);
-            return null;
+            List<Quote> quotes = quoteRepository.deleteByGuildAndName(quoteGuild, quoteName);
+            return quotes.get(0);
         };
     }
 
