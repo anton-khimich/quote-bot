@@ -25,8 +25,7 @@ public class MyBotListener extends ListenerAdapter {
                 content = content.substring(7);
                 content += ",contributor:" + author.toString();
                 JSONObject obj = new JSONObject("{" + content + "}");
-                Bot.saveQuote(obj, guild);
-                reply = new MessageBuilder().append(author).append(" Save quote.").build();
+                reply = new MessageBuilder().append(author).append(" ").append(Bot.saveQuote(obj, guild)).build();
                 channel.sendMessage(reply).queue();
             // Delete the quote by name
             } else if (content.startsWith("!qdelete")) {
@@ -45,7 +44,7 @@ public class MyBotListener extends ListenerAdapter {
             // Display a quote by name
             } else if (content.matches("!q .+")) {
                 content = content.substring(3);
-                reply = new MessageBuilder().append(author).append(" " + Bot.getSpecificQuote(content, guild)).build();
+                reply = new MessageBuilder().append(author).append(" ").append(Bot.getSpecificQuote(content, guild)).build();
                 channel.sendMessage(reply).queue();
             }
         }

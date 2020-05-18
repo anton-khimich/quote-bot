@@ -39,6 +39,33 @@ public class Bot {
         httpClient = HttpClientBuilder.create().build();
     }
 
+    private static HttpPost generateRequest(String data) {
+        HttpPost request = new HttpPost("http://35.231.222.180:8080/graphql");
+        request.addHeader("Content-Type", "application/json");
+        request.addHeader("Accept-Encoding", "gzip, deflate, br");
+        request.addHeader("Accept", "application/json");
+        request.addHeader("DNT", "1");
+        request.addHeader("Origin", "file://");
+        try {
+            request.setEntity(new StringEntity(data));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return request;
+    }
+
+    private static JSONObject sendRequest(HttpPost request) {
+        HttpResponse response;
+        try {
+            response = httpClient.execute(request);
+            String json_string = EntityUtils.toString(response.getEntity());
+            return new JSONObject(json_string);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     static Quote getDailyQuote() {
         LocalDate dateNow = LocalDate.now();
         if (dailyQuote == null) {
@@ -50,41 +77,29 @@ public class Bot {
     }
 
     static JSONObject getSpecificQuote(String name, String guild) {
-        HttpPost request = new HttpPost("http://35.231.222.180:8080/graphql");
-        request.addHeader("Content-Type", "application/json");
-        request.addHeader("Accept-Encoding", "gzip, deflate, br");
-        request.addHeader("Accept", "application/json");
-        request.addHeader("DNT", "1");
-        request.addHeader("Origin", "file://");
-        String data = "{\"query\":\"{quoteByGuildAndName(guild: \\\"" + guild + "\\\", name: \\\"" + name + "\\\") {id, name content author contributor guild}}\"}";
-        try {
-            request.setEntity(new StringEntity(data));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        HttpResponse response;
-        try {
-            response = httpClient.execute(request);
-//            return objectMapper.readValue(response.getEntity().getContent(), JSONObject.class).getJSONObject("data")
-//                    .getJSONObject("quoteByGuildAndName");
-            String json_string = EntityUtils.toString(response.getEntity());
-            return new JSONObject(json_string);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        String data = "{\"query\":\"{quoteByGuildAndName(guild: \\\"" + guild + "\\\", name: \\\"" +
+                name + "\\\") {id, name content author contributor guild}}\"}";
+        HttpPost request = Bot.generateRequest(data);
+        return Bot.sendRequest(request);
     }
 
-    static void saveQuote(JSONObject obj, String guild) {
+    static String saveQuote(JSONObject obj, String guild) {
         String quoteName = obj.getString("name");
         String quoteContent = obj.getString("content");
         String quoteAuthor = obj.getString("author");
         String quoteContributor = obj.getString("contributor");
         if (quoteName != null && quoteContent != null && quoteAuthor != null && quoteContributor != null) {
             // add the quote to the repository
+            String data = "{\"query\":\"{saveQuote(guild: \\\"" + guild + "\\\", name: \\\"" +
+                    quoteName + "\\\") {id, name content author contributor guild}}\"}";
+            HttpPost request = Bot.generateRequest(data);
+            if (Bot.sendRequest(request) != null) {
+                return "Successfully saved the quote.";
+            }
         } else {
             throw new IllegalArgumentException("Incorrect quote format.");
         }
+        return "Failed to save the quote.";
     }
 
     static void deleteQuote(String name, String guild) {
