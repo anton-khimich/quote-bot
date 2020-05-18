@@ -1,8 +1,8 @@
 # quoteBot
 A simple discord bot application.
 
-## Link to add the bot to your server
-https://discordapp.com/api/oauth2/authorize?client_id=558829263730769920&permissions=2048&scope=bot
+## Important
+Development of this project is paused because my free trial on GCP ran out, currently displaying quotes works, and testing of the save quote command is required.
 
 ## List of Future Commands
 ```c
